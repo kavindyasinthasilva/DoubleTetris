@@ -1,7 +1,7 @@
 #include <graphics.h>
 #include <time.h>
 
-#define LEFT 0x4b00    //¹â±ê¼üÖµ¶¨Òå
+#define LEFT 0x4b00    //å…‰æ ‡é”®å€¼å®šä¹‰
 #define RIGHT 0x4d00
 #define DOWN 0x5000
 #define UP 0x4800
@@ -38,6 +38,42 @@ void gameover();
 
 void player1();
 void judge1();
+
+#include <graphics.h>
+#include <dos.h>
+#include <conio.h> 
+ 
+int main()
+{
+   int i, j = 0, gd = DETECT, gm;
+ 
+   initgraph(&gd,&gm,"C:\\TC\\BGI");
+ 
+   settextstyle(DEFAULT_FONT,HORIZ_DIR,2);
+   outtextxy(25,240,"Press any key to view the moving car");
+ 
+   getch();
+   setviewport(0,0,639,440,1);
+ 
+   for( i = 0 ; i <= 420 ; i = i + 10, j++ )
+   {
+      rectangle(50+i,275,150+i,400);
+      rectangle(150+i,350,200+i,400);
+      circle(75+i,410,10);
+      circle(175+i,410,10);
+      setcolor(j);
+      delay(100);
+ 
+      if( i == 420 )
+         break;
+ 
+      clearviewport();
+   }
+ 
+   getch();
+   closegraph();
+   return 0;
+}
 void control1();
 void rotate1();
 void preview1();
@@ -88,7 +124,7 @@ int block2[14][17]={{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,1},
 	              
 
 
-int main(int argc, char *argv[])    //Ö÷º¯Êý
+int main(int argc, char *argv[])    //ä¸»å‡½æ•°
 {
 	init();
 	game();
@@ -96,7 +132,7 @@ int main(int argc, char *argv[])    //Ö÷º¯Êý
 	return 0;
 }
 
-void init()    //³õÊ¼»¯
+void init()    //åˆå§‹åŒ–
 {
 	int i,j;
 	initgraph(&driver,&mode,"");
@@ -146,7 +182,7 @@ void init()    //³õÊ¼»¯
 	drawwall();
 }
 
-void drawwall()    //»æÖÆÍâÇ½
+void drawwall()    //ç»˜åˆ¶å¤–å¢™
 {
 	int i;
 	setcolor(15);
@@ -172,7 +208,7 @@ void drawwall()    //»æÖÆÍâÇ½
 
 }
 
-void game(){    //ÓÎÏ·Ö÷Ìåº¯Êý
+void game(){    //æ¸¸æˆä¸»ä½“å‡½æ•°
 	t10=clock();
 	while(!stop){
 		player1();
@@ -183,7 +219,7 @@ void game(){    //ÓÎÏ·Ö÷Ìåº¯Êý
 	return;
 }
 
-void player1(){//Íæ¼ÒÒ»
+void player1(){//çŽ©å®¶ä¸€
 	preview1();
 	judge1();
     draw();
@@ -194,7 +230,7 @@ void player1(){//Íæ¼ÒÒ»
 	information1();
 }
 
-void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
+void judge1(){//çŽ©å®¶ä¸€-åˆ¤æ–­æ–¹å—
     
 	int i,j;
 	int bottom;
@@ -207,7 +243,7 @@ void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
 			t10=t11;
 			time_count+=1;
 
-			for(line=2;line<=24;line++){//µÃ·Ö
+			for(line=2;line<=24;line++){//å¾—åˆ†
 				bottom=0;
 				for(i=1;i<=10;i++)
 					if(mark1[line][i]==2)
@@ -228,7 +264,7 @@ void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
 				}
 			}
 			
-			if(flag1==1){//ÏÂÒ»»ØºÏ
+			if(flag1==1){//ä¸‹ä¸€å›žåˆ
 				flag1=0;
 		
 				cur1=next1-7;
@@ -244,9 +280,9 @@ void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
 				y_1=random;
 			}
 
-			else{//±¾»ØºÏ
+			else{//æœ¬å›žåˆ
 
-				for(i=15;i>=0;i--)//»ØºÏ½áÊø
+				for(i=15;i>=0;i--)//å›žåˆç»“æŸ
 					if(x_1+i/4>=0)
 						if(block1[cur1][i]==1)
 							if(mark1[x_1+i/4+1][y_1+i%4]!=0){
@@ -256,14 +292,14 @@ void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
 										mark1[x_1+i/4][y_1+i%4]=2;
 							}
 		
-				for(i=1;i<=10;i++)//ÓÎÏ·½áÊø
+				for(i=1;i<=10;i++)//æ¸¸æˆç»“æŸ
 					if(mark1[1][i]==2){
 					    stop=1;
 						fail=1;
 						break;
 						}
 
-				if(stop!=1&&flag1!=1){//»ØºÏÎ´½áÊø
+				if(stop!=1&&flag1!=1){//å›žåˆæœªç»“æŸ
 					if(time_count%10==0)
 						x_1++;
 				}
@@ -272,7 +308,7 @@ void judge1(){//Íæ¼ÒÒ»-ÅÐ¶Ï·½¿é
 	}
 }
 
-void control1(){//Íæ¼ÒÒ»-¿ØÖÆ·½¿é
+void control1(){//çŽ©å®¶ä¸€-æŽ§åˆ¶æ–¹å—
  
 	int i,j;
 	int flag=0;
@@ -361,7 +397,7 @@ void control1(){//Íæ¼ÒÒ»-¿ØÖÆ·½¿é
 	}
 }
 
-void rotate1()    //Íæ¼ÒÒ»-Ðý×ª
+void rotate1()    //çŽ©å®¶ä¸€-æ—‹è½¬
 {
 	int i,j;
 	int temp[16];
@@ -376,7 +412,7 @@ void rotate1()    //Íæ¼ÒÒ»-Ðý×ª
 	free(temp);
 }
 
-void preview1(){//Íæ¼ÒÒ»-Ô¤ÀÀ·½¿é
+void preview1(){//çŽ©å®¶ä¸€-é¢„è§ˆæ–¹å—
 
 	int i;
 	char s1[6]="Next:";
@@ -394,7 +430,7 @@ void preview1(){//Íæ¼ÒÒ»-Ô¤ÀÀ·½¿é
 
 }
 
-void player2(){//Íæ¼Ò¶þ
+void player2(){//çŽ©å®¶äºŒ
 	preview2();
 	judge2();
     draw();
@@ -405,7 +441,7 @@ void player2(){//Íæ¼Ò¶þ
 	information2();
 }
 
-void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
+void judge2(){//çŽ©å®¶äºŒ-åˆ¤æ–­æ–¹å—
     
 	int i,j;
 	int bottom;
@@ -418,7 +454,7 @@ void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
 			t10=t11;
 			time_count+=1;
 
-			for(line=2;line<=24;line++){//µÃ·Ö
+			for(line=2;line<=24;line++){//å¾—åˆ†
 				bottom=0;
 				for(i=1;i<=10;i++)
 					if(mark2[line][i]==2)
@@ -439,7 +475,7 @@ void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
 				}
 			}
 			
-			if(flag2==1){//ÏÂÒ»»ØºÏ
+			if(flag2==1){//ä¸‹ä¸€å›žåˆ
 				flag2=0;
 		
 				cur2=next2-7;
@@ -455,9 +491,9 @@ void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
 				y_2=random;
 			}
 
-			else{//±¾»ØºÏ
+			else{//æœ¬å›žåˆ
 
-				for(i=15;i>=0;i--)//»ØºÏ½áÊø
+				for(i=15;i>=0;i--)//å›žåˆç»“æŸ
 					if(x_2+i/4>=0)
 						if(block2[cur2][i]==1)
 							if(mark2[x_2+i/4+1][y_2+i%4]!=0){
@@ -467,14 +503,14 @@ void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
 										mark2[x_2+i/4][y_2+i%4]=2;
 							}
 		
-				for(i=1;i<=10;i++)//ÓÎÏ·½áÊø
+				for(i=1;i<=10;i++)//æ¸¸æˆç»“æŸ
 					if(mark2[1][i]==2){
 					    stop=1;
 						fail=2;
 						break;
 						}
 
-				if(stop!=1&&flag2!=1){//»ØºÏÎ´½áÊø
+				if(stop!=1&&flag2!=1){//å›žåˆæœªç»“æŸ
 					if(time_count%10==0)
 						x_2++;
 				}
@@ -483,7 +519,7 @@ void judge2(){//Íæ¼Ò¶þ-ÅÐ¶Ï·½¿é
 	}
 }
 
-void control2(){//Íæ¼Ò¶þ-¿ØÖÆ·½¿é
+void control2(){//çŽ©å®¶äºŒ-æŽ§åˆ¶æ–¹å—
  
 	int i,j;
 	int flag=0;
@@ -572,7 +608,7 @@ void control2(){//Íæ¼Ò¶þ-¿ØÖÆ·½¿é
 	}
 }
 
-void rotate2()    //Íæ¼ÒÒ»-Ðý×ª
+void rotate2()    //çŽ©å®¶ä¸€-æ—‹è½¬
 {
 	int i,j;
 	int temp[16];
@@ -587,7 +623,7 @@ void rotate2()    //Íæ¼ÒÒ»-Ðý×ª
 	free(temp);
 }
 
-void preview2(){//Íæ¼Ò¶þ-Ô¤ÀÀ·½¿é
+void preview2(){//çŽ©å®¶äºŒ-é¢„è§ˆæ–¹å—
 
 	int i;
 	char s1[6]="Next:";
@@ -605,7 +641,7 @@ void preview2(){//Íæ¼Ò¶þ-Ô¤ÀÀ·½¿é
 
 }
 
-void draw(){//»æÖÆº¯Êý
+void draw(){//ç»˜åˆ¶å‡½æ•°
 	int i,j;
 	int color;
 
@@ -666,7 +702,7 @@ void draw(){//»æÖÆº¯Êý
 		}
 }
 
-void information1(){//Íæ¼Ò1ÐÅÏ¢
+void information1(){//çŽ©å®¶1ä¿¡æ¯
 	
 	char s1[6]="Name:";
 	char s2[7]="Score:";
@@ -680,7 +716,7 @@ void information1(){//Íæ¼Ò1ÐÅÏ¢
 
 }
 
-void information2(){//Íæ¼Ò2ÐÅÏ¢
+void information2(){//çŽ©å®¶2ä¿¡æ¯
 
 	char s1[6]="Name:";
 	char s2[7]="Score:";
@@ -694,14 +730,14 @@ void information2(){//Íæ¼Ò2ÐÅÏ¢
 
 }
 
-void wordprint(char* s,int x,int y,int color)   //ÎÄ×Ö´òÓ¡º¯Êý
+void wordprint(char* s,int x,int y,int color)   //æ–‡å­—æ‰“å°å‡½æ•°
 { 
 	setcolor(color);
 	outtextxy(x,y,s);
 	
 }
 
-void numberprint(int n,int x,int y,int color)    //Êý×Ö´òÓ¡º¯Êý
+void numberprint(int n,int x,int y,int color)    //æ•°å­—æ‰“å°å‡½æ•°
 {
 	char* p;
 	int number=n;
@@ -730,7 +766,8 @@ void numberprint(int n,int x,int y,int color)    //Êý×Ö´òÓ¡º¯Êý
 	outtextxy(x,y,p);
 }
 
-void gameover()    //¹Ø±ÕÓÎÏ·
+void gameover()  int sky ;
+
 {
 	clrscr();
 
